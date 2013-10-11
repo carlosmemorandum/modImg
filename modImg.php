@@ -35,7 +35,7 @@ class modImg{
 	}
 
 	public function redimensionar( $conf = array() ){
-		if ( !empty($conf) && !$this->error == 1 ) {
+		if ( !empty($conf) && !$this->error ) {
 			$ruta_imagen            = $this->urlOriginal;
 			$miniatura_ancho_maximo = $conf['size'][0];
 			$miniatura_alto_maximo  = $conf['size'][1];
