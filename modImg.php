@@ -3,9 +3,9 @@
 * img
 */
 class modImg{
-	public $urlOriginal = null;
-	public $urlDestino = null;
-	public $nombre = null;
+	private $urlOriginal = null;
+	private $urlDestino = null;
+	private $nombre = null;
 	private $ext;
 	private $error = false;
 	private $procesada = false;
@@ -109,7 +109,17 @@ class modImg{
 			}
 		}
 
-		public function getRedimensionar(){
+		/**
+		 * [getEstado description]
+		 * @return boleano 1 si la imagen fue redimensionada correctamente
+		 * y 0 si ocurrio algun error
+		 */
+		public function getEstado()
+		{
+			return $this->procesada;
+		}
+
+		public function getUrl(){
 			if ( $this->procesada ) {
 				return $this->urlDestino;
 			} else {
