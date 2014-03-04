@@ -82,7 +82,7 @@ class modImg{
 			imagecopyresampled($lienzo_temporal, $imagen, 0, 0, 0, 0, $miniatura_ancho, $miniatura_alto, $imagen_ancho, $imagen_alto);
 			imagecopy($lienzo, $lienzo_temporal, 0,0, $x, $y, $miniatura_ancho_maximo, $miniatura_alto_maximo);
 			$rutaRelativa = $conf['pathRelativo'];
-			$this->urlDestino = $conf['pathRelativo']. $conf['size'][0] ."x" .$conf['size'][1] . "-" .$this->nombre;
+			$this->urlDestino = $conf['pathRelativo']. ($conf['nombre']) ? $conf['nombre'] : rand(100,800) . '-'. $conf['size'][0] ."x" .$conf['size'][1] . "-" .$this->nombre;
 			if (file_exists($rutaRelativa)) {
 				if ( imagejpeg($lienzo,$this->urlDestino, $conf['calidad']) ) {
 					$this->procesada = true;
@@ -90,7 +90,7 @@ class modImg{
 				imagedestroy($lienzo);
 				imagedestroy($lienzo_temporal);
 			} else {
-				if ( mkdir($rutaRelativa, 0700) ) {
+				if ( mkdir($rutaRelativa, 0777) ) {
 					if ( imagejpeg($lienzo,$this->urlDestino, $conf['calidad']) ) {
 						$this->procesada = true;
 						imagedestroy($lienzo);
