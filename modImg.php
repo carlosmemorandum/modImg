@@ -12,14 +12,15 @@ class modImg{
 	private static $msgNoImg = "No existe ninguna imagen";
 	private $mensaje;
 
-	public function setImagen($urlOriginal = null ){
+	public function setImagen($urlOriginal = null, $nombre = false ){
 		if ($urlOriginal != null) {
+			$nombre = ($nombre) ? $nombre : rand(100,1000);
 			$this->urlOriginal = $urlOriginal;
 			$formatosValidos = array("jpg","jpeg","png","gif");
 			list($txt, $ext) = explode('.', $this->urlOriginal);
 			if ( in_array($ext, $formatosValidos) ) {
 				$buscar = array(" ", "/", "ñ","ó","í","ç","á","é","í","ú","Á","É","Í","Ú","Ó");
-				$this->nombre = strtolower( time().substr(str_replace($buscar, "_", $txt), -1) .".".$ext);
+				$this->nombre = strtolower( $nombre .'-' . time().substr(str_replace($buscar, "", $txt), -10) .".".$ext);
 				$this->ext = $ext;
 				return $this->nombre;
 			} else{
@@ -81,8 +82,9 @@ class modImg{
 
 			imagecopyresampled($lienzo_temporal, $imagen, 0, 0, 0, 0, $miniatura_ancho, $miniatura_alto, $imagen_ancho, $imagen_alto);
 			imagecopy($lienzo, $lienzo_temporal, 0,0, $x, $y, $miniatura_ancho_maximo, $miniatura_alto_maximo);
-			$rutaRelativa = $conf['pathRelativo'];
-			$this->urlDestino = $conf['pathRelativo']. ($conf['nombre']) ? $conf['nombre'] : rand(100,800) . '-'. $conf['size'][0] ."x" .$conf['size'][1] . "-" .$this->nombre;
+			if (!file_exists($conf['pathRelativo'])) mkdir($conf['pathRelativo'],0777);
+			$rutaRelativa = $conf['pathRelativo'] . $conf['size'][0] ."x" .$conf['size'][1];
+			$this->urlDestino = $rutaRelativa . "/". $this->nombre;
 			if (file_exists($rutaRelativa)) {
 				if ( imagejpeg($lienzo,$this->urlDestino, $conf['calidad']) ) {
 					$this->procesada = true;
@@ -128,4 +130,23 @@ class modImg{
 		}
 	}
 
-	?>
+
+/*
+$imagen = new modImg();
+echo "<pre>".print_r($imagen->setImagen("img/code1.png"),true)."</pre>\n";
+$conf = array('calidad' => 90, 'pathRelativo' => 'img/portada/' , 'size' => array(803,900) );
+echo "<pre>".print_r($imagen->redimensionar($conf),true)."</pre>\n";
+echo "<pre>".print_r($imagen->getEstado(),true)."</pre>\n";
+echo "<pre>".print_r($imagen->getUrl(),true)."</pre>\n";
+
+$imagen2 = new modImg();
+echo "<pre>".print_r($imagen2->setImagen("img/code1.png"),true)."</pre>\n";
+$conf = array('calidad' => 90, 'pathRelativo' => 'img/thum/' , 'size' => array(803,900) );
+echo "<pre>".print_r($imagen2->redimensionar($conf),true)."</pre>\n";
+echo "<pre>".print_r($imagen2->getEstado(),true)."</pre>\n";
+echo "<pre>".print_r($imagen2->getUrl(),true)."</pre>\n";
+*/
+
+
+?>
+
